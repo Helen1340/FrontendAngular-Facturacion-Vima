@@ -1,0 +1,210 @@
+<div class="overlay" [class.hidden]="!sidebarVisible()" class="fixed inset-0 bg-black/50 z-40 md:hidden"
+    (click)="toggleSidebar()">
+</div>
+
+<!-- Contenido principal -->
+<main class="w-full md:ml-0 p-4 flex-1 overflow-auto">
+    <!-- Botón hamburguesa solo visible en móvil -->
+    <button (click)="toggleSidebar()" class="fixed top-1 right-4 z-50 p-2 rounded md:hidden">
+        <!-- Icono 3 líneas -->
+        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <div class="-mt-4 mb-2">
+        <h2 class="text-4xl font-semibold mb-6 mt-8">
+            Nuevo Usuario
+        </h2>
+    </div>
+
+    <div class="border-b-2 border-gray-300 w-full mb-8"></div>
+
+    <!-- CONTENEDOR DEL FORMULARIO -->
+    <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white rounded-lg shadow-xl p-4 sm:p-6 lg:p-8">
+            <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                <!-- Primera fila: Nombre completo y Usuario -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <label for="nombre" class="block text-sm font-medium text-black mb-2">
+                            Nombre completo <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="nombre" formControlName="nombre"
+                            class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                            [class.border-gray-300]="usuarioForm.get('nombre')?.valid || !usuarioForm.get('nombre')?.touched"
+                            [class.border-red-500]="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched">
+                        <div *ngIf="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched"
+                            class="mt-1 text-xs text-red-500">
+                            El nombre es requerido
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="usuario" class="block text-sm font-medium text-black mb-2">
+                            Usuario (Username) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="usuario" formControlName="usuario"
+                            class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                            [class.border-gray-300]="usuarioForm.get('usuario')?.valid || !usuarioForm.get('usuario')?.touched"
+                            [class.border-red-500]="usuarioForm.get('usuario')?.invalid && usuarioForm.get('usuario')?.touched">
+                        <div *ngIf="usuarioForm.get('usuario')?.invalid && usuarioForm.get('usuario')?.touched"
+                            class="mt-1 text-xs text-red-500">
+                            El usuario es requerido y debe tener al menos 3 caracteres
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segunda fila: Correo electrónico -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-black mb-2">
+                        Correo electrónico <span class="text-red-500">*</span>
+                    </label>
+                    <input type="email" id="email" formControlName="email"
+                        class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                        [class.border-gray-300]="usuarioForm.get('email')?.valid || !usuarioForm.get('email')?.touched"
+                        [class.border-red-500]="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
+                    <div *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched"
+                        class="mt-1 text-xs text-red-500">
+                        Ingresa un correo electrónico válido
+                    </div>
+                </div>
+
+                <!-- Tercera fila: Contraseña y Confirmar -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-black mb-2">
+                            Contraseña <span class="text-red-500">*</span>
+                        </label>
+                        <input type="password" id="password" formControlName="password"
+                            class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                            [class.border-gray-300]="usuarioForm.get('password')?.valid || !usuarioForm.get('password')?.touched"
+                            [class.border-red-500]="usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched">
+                        
+                        <div *ngIf="usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched"
+                            class="mt-1 text-xs text-red-500">
+                            La contraseña debe tener al menos 8 caracteres, incluir mayúsculas y números
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-black mb-2">
+                            Confirmar contraseña <span class="text-red-500">*</span>
+                        </label>
+                        <input type="password" id="confirmPassword" formControlName="confirmPassword"
+                            class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                            [class.border-gray-300]="usuarioForm.get('confirmPassword')?.valid || !usuarioForm.get('confirmPassword')?.touched"
+                            [class.border-red-500]="usuarioForm.get('confirmPassword')?.invalid && usuarioForm.get('confirmPassword')?.touched">
+                        <div *ngIf="usuarioForm.get('confirmPassword')?.invalid && usuarioForm.get('confirmPassword')?.touched"
+                            class="mt-1 text-xs text-red-500">
+                            Las contraseñas no coinciden
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cuarta fila: Rol asignado -->
+                <div>
+                    <label for="rol" class="block text-sm font-medium text-black mb-2">
+                        Rol asignado <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="rol" formControlName="rol"
+                        class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                        [class.border-gray-300]="usuarioForm.get('rol')?.valid || !usuarioForm.get('rol')?.touched"
+                        [class.border-red-500]="usuarioForm.get('rol')?.invalid && usuarioForm.get('rol')?.touched">
+                    <div *ngIf="usuarioForm.get('rol')?.invalid && usuarioForm.get('rol')?.touched"
+                        class="mt-1 text-xs text-red-500">
+                        El rol es requerido
+                    </div>
+                </div>
+
+                <!-- Sección Estado y Permisos -->
+                <div class="grid grid-cols-1 xl:grid-cols-4 gap-8 pt-4">
+                    <!-- Estado -->
+                    <div>
+                        <h3 class="text-sm font-medium text-black mb-4">Estado</h3>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="usuarioActivo" formControlName="usuarioActivo"
+                                class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                            <label for="usuarioActivo" class="ml-2 text-sm text-black">
+                                Usuario activo
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Permisos -->
+                    <div class="xl:col-span-3" formGroupName="permisos">
+                        <h3 class="text-sm font-medium text-black mb-4">Permisos</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="facturas" formControlName="facturas"
+                                    class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                                <label for="facturas" class="ml-2 text-sm text-black">
+                                    Facturas
+                                </label>
+                            </div>
+
+                            <div class="flex items-center">
+                                <input type="checkbox" id="clientes" formControlName="clientes"
+                                    class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                                <label for="clientes" class="ml-2 text-sm text-black">
+                                    Clientes
+                                </label>
+                            </div>
+
+                            <div class="flex items-center">
+                                <input type="checkbox" id="reportes" formControlName="reportes"
+                                    class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                                <label for="reportes" class="ml-2 text-sm text-black">
+                                    Reportes
+                                </label>
+                            </div>
+
+                            <div class="flex items-center">
+                                <input type="checkbox" id="productos" formControlName="productos"
+                                    class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                                <label for="productos" class="ml-2 text-sm text-black">
+                                    Productos
+                                </label>
+                            </div>
+
+                            <div class="flex items-center">
+                                <input type="checkbox" id="contingencias" formControlName="contingencias"
+                                    class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                                <label for="contingencias" class="ml-2 text-sm text-black">
+                                    Contingencias
+                                </label>
+                            </div>
+
+                            <div class="flex items-center">
+                                <input type="checkbox" id="configuraciones" formControlName="configuraciones"
+                                    class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                                <label for="configuraciones" class="ml-2 text-sm text-black">
+                                    Configuraciones
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón Crear -->
+                <div class="pt-6 flex justify-end">
+                    <button type="submit" [disabled]="usuarioForm.invalid || isSubmitting()"
+                        class="bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-16 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition duration-200">
+                        {{ isSubmitting() ? 'Creando...' : 'Crear' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notificación de éxito -->
+    <div *ngIf="showNotification()"
+        class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in">
+        <div class="flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>¡Usuario creado exitosamente!</span>
+        </div>
+    </div>
+</main>
